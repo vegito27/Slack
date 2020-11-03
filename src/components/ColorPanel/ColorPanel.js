@@ -10,9 +10,9 @@ export default class ColorPanel extends React.Component {
 
 	render() {
 		return (
-			<Sidebar as={Menu} icon="label" inverted vertical visible width="very thin">
+			<Sidebar as={Menu} icon="labeled" inverted vertical visible width="very thin">
 			<Divider />
-			<Button size="sm" color="blue"/>
+			<Button icon="add" size="sm" color="blue"/>
 
 
 
