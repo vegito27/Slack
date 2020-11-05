@@ -36,8 +36,6 @@ class Channels extends React.Component {
 
 			loadedChannels.push(snap.val());
 
-			console.log(loadedChannels)
-
 			this.setState({channels:loadedChannels},()=>this.setFirstChannel())
 
 		})
@@ -145,8 +143,6 @@ class Channels extends React.Component {
 		const {channels,modal}=this.state
 
 
-		console.log("state",this.state)
-
 		return (
 
 			<React.Fragment>
@@ -188,7 +184,7 @@ class Channels extends React.Component {
 						 <Icon name="checkmark" />Add 
 					 </Button>
 
-					  <Button color="red " inverted onClick={this.closeModal} >
+					  <Button color="red" inverted onClick={this.closeModal} >
 						 <Icon name="remove" />Cancel 
 					 </Button>
 

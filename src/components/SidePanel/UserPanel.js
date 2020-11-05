@@ -60,7 +60,7 @@ class UserPanel extends React.Component {
 					</Grid.Row>
 
 					<Header style={{ padding:'0.25em' }} as="h4" inverted>
-						<Dropdown trigger={<span><Image src={user.photoURL} spaced="right" avatar />{user.displayName}</span>} options={this.dropdownOptions()}/>
+						<Dropdown trigger={<span><Image src={user.photoURL} color="pink" spaced="right" avatar />{user.displayName}</span>} options={this.dropdownOptions()}/>
 					 </Header>
 
 				</Grid.Column>

@@ -8,9 +8,6 @@ const Spinner = () => {
 	    <Loader size="huge" content={"Preparing chat..."} />
     </Dimmer>
   
-  )
-}
-
-
+  )}
 
 export default Spinner;
