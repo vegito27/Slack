@@ -1,8 +1,9 @@
-import {SET_CURRENT_CHANNEL} from '../types'
+import {SET_CURRENT_CHANNEL,SET_PRIVATE_CHANNEL} from '../types'
 
 const initialChannelState={
 
-	currentChannel:null
+	currentChannel:null,
+	isPrivateChannel:false
 }
 
 const channel_reducer=(state=initialChannelState,action)=>{
@@ -14,6 +15,12 @@ const channel_reducer=(state=initialChannelState,action)=>{
 				...state,
 				currentChannel:action.payload.currentChannel	
 				}
+
+		case SET_PRIVATE_CHANNEL:
+			return {
+				...state,
+				isPrivateChannel:action.payload.isPrivateChannel
+			}		
 
 		default:
 			return state

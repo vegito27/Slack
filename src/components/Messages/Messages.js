@@ -12,7 +12,7 @@ export default class Messages extends React.Component {
 		super(props);
 
 	this.state={
-
+		privateChannel:this.props.isPrivateChannel,
 		messagesRef:firebase.database().ref('messages'),
 		channel:this.props.currentChannel,
 		user:this.props.currentUser,
@@ -22,7 +22,8 @@ export default class Messages extends React.Component {
 		numUniqueUser:'',
 		searchTerm:'',
 		searchLoading:false,
-		searchResults:[] 
+		searchResults:[],
+		privateMessagesRef:firebase.database().ref('privateMessages') 
 		
 		}
 	}
@@ -45,16 +46,21 @@ export default class Messages extends React.Component {
 		 }
 	}
 
-	displayChannelName=channel=>channel?`#${channel.name}`:''
-
+	displayChannelName=channel=>{
+		return channel?`#${this.state.privateChannel ? '@': '#'}${channel.name}`:' '
+		}
 
 	addMessagelisteners=channelId=>{
 
 		let loadedMessages=[]
 
+
+		const ref=this.getMessagesRef()
+
+
 		//inserting messages into firebase
 
-		this.state.messagesRef.child(channelId).on('child_added',snap=>{
+		ref.child(channelId).on('child_added',snap=>{
 
 			loadedMessages.push(snap.val() )
 
@@ -69,6 +75,14 @@ export default class Messages extends React.Component {
 		})
 	}
 
+
+	getMessagesRef=()=>{
+
+		const {messagesRef,privateMessagesRef,privateChannel}=this.state
+
+		return privateChannel ? privateMessagesRef:messagesRef
+ 	}
+
 	countuniqueUsers=messages=>{
 		const uniqueUsers=messages.reduce((acc,message)=> {
 
@@ -80,7 +94,7 @@ export default class Messages extends React.Component {
 
 			},[])
 
-		console.log(uniqueUsers)
+		// console.log(uniqueUsers)
 
 		const plural=uniqueUsers.length>1 || uniqueUsers.length===0
 
@@ -125,8 +139,6 @@ export default class Messages extends React.Component {
 
 	}
 
-	
-	
 
 	displayMessages=messages=>(
 
@@ -134,19 +146,21 @@ export default class Messages extends React.Component {
 				
 	)
 
-	render() {
+	render(){
 
-		const {messagesRef,messages, channel,user,progressBar,numUniqueUser,searchTerm,searchResults,searchLoading  }=this.state
+		const { messagesRef,messages,channel,user,progressBar,numUniqueUser,searchTerm,searchResults,searchLoading,privateChannel,isPrivateChannel }=this.state
 
 		console.log('message states',this.state)
 
 		return (
+
 			<React.Fragment>
 				<MessagesHeader 
 					channelName={this.displayChannelName(channel)} 
 					numUniqueUser={numUniqueUser} 
 					handleSearchChange={this.handleSearchChange}
 					searchLoading={searchLoading} 
+					isPrivateChannel={isPrivateChannel}
 				/>
 
 				<Segment>
@@ -158,11 +172,20 @@ export default class Messages extends React.Component {
 
 				</Segment>
 
-				<MessageForm messagesRef={messagesRef} currentChannel={channel} currentUser={user}  isProgressBarVisible={this.isProgressBarVisible}/>
+				<MessageForm 
+					messagesRef={messagesRef} 
+					currentChannel={channel} 
+					currentUser={user} 
+					isPrivateChannel={privateChannel}  
+					isProgressBarVisible={this.isProgressBarVisible}
+					getMessagesRef={this.getMessagesRef}
+				/>
  
 			</React.Fragment>
 		);
 	}
 }
+
+
 
 

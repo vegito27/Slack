@@ -10,9 +10,9 @@ export default class MessagesHeader extends React.Component {
 
 	render() {
 
-		const {channelName,numUniqueUser,handleSearchChange,searchLoading }=this.props
+		const {channelName,numUniqueUser,handleSearchChange,searchLoading,isPrivateChannel }=this.props
 
-		console.log("Message header",this.props)
+		// console.log("Message header",this.props)
 
 
 		return (
@@ -20,7 +20,7 @@ export default class MessagesHeader extends React.Component {
 
 				<Header fluid="true" as="h2" floated="left" style={{ marginBottom:0}}>
 					<span>
-						  {channelName } <Icon name={"star outline"} color="black" />
+						  {channelName } { !isPrivateChannel && <Icon name={"star outline"} color="black" />}
 					</span>
 
 					<Header.Subheader>{ numUniqueUser } </Header.Subheader>

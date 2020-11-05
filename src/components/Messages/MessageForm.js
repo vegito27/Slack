@@ -18,7 +18,7 @@ import ProgressBar from './ProgressBar'
 		loading:false,
 		errors:[],
 		modal:false,
-		percentUploaded:0
+		percentUploaded:0,
  	}
 
 
@@ -72,16 +72,14 @@ import ProgressBar from './ProgressBar'
 
 
 	sendMessage=()=>{
-		const {messagesRef}=this.props
-
-		console.log(messagesRef)
+		const {getMessagesRef }=this.props
 
 		const {message,channel}=this.state
 
 		if(message){
 			this.setState({loading:true})
 
-			messagesRef
+			getMessagesRef() 
 			.child(channel.id)
 			.push()
 			.set(this.createMessage())
@@ -104,12 +102,21 @@ import ProgressBar from './ProgressBar'
 		}    
 	}
 
+
+	getPath=()=>{
+		if(this.props.isPrivateChannel){
+			 return `chat/private-${this.state.channel.id }`
+		}else{
+			return `chat/public`
+		}
+	}
+
 	uploadFile=(file,metadata)=>{
 
 
  		const pathToUpload=this.state.channel.id
- 		const ref=this.props.messagesRef
- 		const filePath=`chat/public/${uuidv4()}.jpeg`
+ 		const ref=this.props.getMessagesRef() 
+ 		const filePath=`${this.getPath()}/${uuidv4()}.jpeg`
 
  		this.setState(
 	 		

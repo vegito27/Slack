@@ -43,3 +43,7 @@ html,body,.app2{
   height:58vh;
   overflow-y:scroll ;
 }
+
+.menu{
+   padding-bottom:2em;  
+}
