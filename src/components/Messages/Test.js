@@ -1,5 +1,6 @@
 import React from 'react';
 import {Comment} from  'semantic-ui-react'
+import {SliderPicker} from 'react-color'
 
 class Test extends React.Component {
 	
@@ -9,18 +10,7 @@ class Test extends React.Component {
 
 	render() {
 		return (
-		    <Comment>
-
-			    <Comment.Content >
-
-			    <Comment.Author >Rishabh Tripathi</Comment.Author>
-
-			    
-			    <Comment.Text >Hello World</Comment.Text>
-			    </Comment.Content>
-
-
-		    </Comment>
+		    <SliderPicker  />
 	    )
 	}
 }

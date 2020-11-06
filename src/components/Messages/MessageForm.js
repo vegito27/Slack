@@ -1,7 +1,6 @@
 import React from 'react';
 import {Segment,Button,Input} from 'semantic-ui-react' 
 import firebase from '../../firebase'
-import md5 from 'md5'
 import FileModal from './FileModal'
 import { v4 as uuidv4 } from 'uuid';
 import ProgressBar from './ProgressBar'
@@ -163,8 +162,6 @@ import ProgressBar from './ProgressBar'
 		 	)
  		}
  	)}
-
- 
 
 	render() {
 

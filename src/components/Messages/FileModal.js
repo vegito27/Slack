@@ -1,6 +1,7 @@
 import React from 'react';
 import mime from 'mime-types'
 import {Modal,Input,Button,Icon} from 'semantic-ui-react'
+import Test from './Test'
 
  class FileModal extends React.Component {
 
@@ -9,7 +10,6 @@ import {Modal,Input,Button,Icon} from 'semantic-ui-react'
  		file:null,
  		authorized:['image/jpeg','image/png']
  	}
-
 
  	addFile=event=>{
  		console.log(event)
@@ -72,6 +72,8 @@ import {Modal,Input,Button,Icon} from 'semantic-ui-react'
 					</Button>    
 
 				</Modal.Actions>
+
+				<Test />
  
 			</Modal>
 		);

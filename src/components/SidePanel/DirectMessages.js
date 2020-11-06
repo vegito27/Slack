@@ -143,7 +143,7 @@ import {setCurrentChannel,setPrivateChannel} from '../../redux/actions/channelAc
 	render() {
 		const { users,activeChannel  }=this.state
 
-		console.log(this.state)
+	
 
 		return (
 			<Menu.Menu>

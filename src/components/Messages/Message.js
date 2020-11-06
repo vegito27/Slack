@@ -18,7 +18,6 @@ const timeFromNow=timestamp=>moment(timestamp).fromNow()
 
 const Message = ({message,user}) => {
 
-	
   return (
   
     <Comment>

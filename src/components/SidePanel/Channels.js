@@ -48,6 +48,7 @@ class Channels extends React.Component {
 
 
 	addNotificationListener=channelId=>{
+
 		 this.state.messagesRef.child(channelId).on('value',snap=>{
 		 	if(this.state.channel){
 
@@ -76,8 +77,6 @@ class Channels extends React.Component {
 
 			notifications[index].lastKnownTotal=snap.numChildren()
 
-
-
 		}else{
 			notifications.push({
 				id:channelId,
@@ -105,7 +104,7 @@ class Channels extends React.Component {
 		this.setState({firstLoad:false})
 
 	}
-	
+
 	closeModal=()=>this.setState({modal:false})
 
 	openModal=()=>this.setState({modal:true})
@@ -119,7 +118,6 @@ class Channels extends React.Component {
 
 		let count=0;
 
-
 		this.state.notifications.forEach(notification=>{
 
 			if(notification.id===channel.id){
@@ -128,11 +126,9 @@ class Channels extends React.Component {
 			}
 		})
 
-
-		if(count>0) return count
-
-
+		if(count>0) return count 
 	}
+
 
 
 	changeChannel=channel=>{
@@ -168,28 +164,7 @@ class Channels extends React.Component {
 
 		 }
 	}
-
-
-
-	displayChannels=channels=>(
-
-		 (
-		 	channels.length >0 && channels.map(
-		 	channel=>(
-				<Menu.Item 
-					key={channel.id} 
-					onClick={()=>this.changeChannel(channel)} 
-					name={channel.name} 
-					active={channel.id===this.state.activeChannel}  
-					style={{opacity:0.7}}>{this.getNotificationCount(Label) && (<Label color="red" >{this.getNotificationCount(channel)}</Label>) }
-
-					#{' '}{channel.name}
-				</Menu.Item>
-			)
-		) 
-		)
-	)
-	  
+	
 
 	addChannel=()=>{
 
@@ -217,24 +192,40 @@ class Channels extends React.Component {
 
 			})
 			.catch(err=>console.log(err))
-
-
-	}
+		}
 
 	handleSubmit=event=>{
 		event.preventDefault();
 		 if(this.isFormValid(this.state)){
-
 		 	this.addChannel()
-
 		 	console.log('channel added')
-
-		 }
+		}
 	}
-
 
 	isFormValid=({channelName,channelDetails})=>channelName && channelDetails
 
+	displayChannels=channels=>
+			 
+	 	channels.length >0 && 
+
+	 	channels.map(channel=>(
+			
+			<Menu.Item 
+				key={channel.id} 
+				onClick={()=>this.changeChannel(channel)} 
+				name={channel.name} 
+				active={channel.id===this.state.activeChannel}  
+				style={{opacity:0.7}}
+			> 
+
+				{this.getNotificationCount(channel) && (<Label color="red" > {this.getNotificationCount(channel)} </Label>) }
+
+				#{' '}{channel.name}
+
+			</Menu.Item>
+		)
+	) 
+			
 	render() {
 
 		const {channels,modal}=this.state
@@ -253,7 +244,6 @@ class Channels extends React.Component {
 				</Menu.Item>
 
 				{this.displayChannels(channels)}
-
 
 			 </Menu.Menu>
 

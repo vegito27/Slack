@@ -1,8 +1,9 @@
-import {SET_USER,CLEAR_USER} from '../types'
+ import {SET_USER,CLEAR_USER,SET_USERS_POSTS} from '../types'
 
 const initialUserState={
 	currentUser:null,
-	isLoading:true
+	isLoading:true,
+	userPosts:null
 }
 
 const user_reducer=(state=initialUserState,action)=>{
@@ -19,6 +20,11 @@ const user_reducer=(state=initialUserState,action)=>{
 				 ...state,
 				 isLoading:false,
 			}
+		case SET_USERS_POSTS:
+			return {
+				...state,
+				userPosts:action.payload.userPosts
+			}	
 		default:
 			return state
 

@@ -5,7 +5,6 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {
   BrowserRouter as Router,
-  Link,
   Route,
   Switch,withRouter
 } from 'react-router-dom';
@@ -43,7 +42,6 @@ class Root extends React.Component{
 
 			}
 		})
-
 	}
 
 	render(){
