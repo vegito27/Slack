@@ -11,7 +11,6 @@ export default class MessagesHeader extends React.Component {
 
 		// console.log("Message header",this.props)
 
-
 		return (
 			<Segment clearing>
 
@@ -29,12 +28,9 @@ export default class MessagesHeader extends React.Component {
 					<Header.Subheader>{ numUniqueUser } </Header.Subheader>
 				</Header>
 
-
 				<Header floated="right">
 					 <Input loading={searchLoading} size="mini" onChange={handleSearchChange} icon="search" name="searchTerm" placeholder="Search Messages" />
 				</Header>
-
-
 				
 			</Segment>
 		);

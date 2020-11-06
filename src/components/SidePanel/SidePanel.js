@@ -22,7 +22,7 @@ import Starred from './Starred'
 				fixed="left"
 				vertical
 				style={{background:primaryColor,fontSize:"1.2rem"}}
-				>
+			>
 				<UserPanel primaryColor={primaryColor} currentUser={currentUser}/>
 				<Starred currentUser={currentUser}/>
 				<Channels currentUser={currentUser}/>

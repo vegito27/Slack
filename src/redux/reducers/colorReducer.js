@@ -11,8 +11,9 @@ const color_reducer=(state=initialColorsState,action)=>{
 
 		case SET_COLORS:
 			return {
-				primaryColor:action.payload.primaryColor,
-				secondaryColor:action.payload.secondaryColor
+				primaryColor: action.payload.primaryColor,
+
+				secondaryColor: action.payload.secondaryColor
 			}
 		default:
 			return state	

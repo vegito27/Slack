@@ -9,6 +9,7 @@ import ProgressBar from './ProgressBar'
 
 	state={
 		storageRef:firebase.storage().ref(),
+		typingRef:firebase.database().ref('typing'),
 		uploadState:'',
 		uploadTask:null,
 		message:'',
@@ -39,7 +40,6 @@ import ProgressBar from './ProgressBar'
 				avatar:this.state.user.photoURL   
 
 			},
-			
 		};
 
 		if(fileUrl!==null){
@@ -64,16 +64,16 @@ import ProgressBar from './ProgressBar'
 			 	 console.error(err)
 			 	 this.setState({
 			 	 	errors:this.state.errors.concat(err)
-			 	 })
+			 	})
 
-			 })
-	}
+			})
+		}
 
 
 	sendMessage=()=>{
 		const {getMessagesRef }=this.props
 
-		const {message,channel}=this.state
+		const {message,channel,user}=this.state
 
 		if(message){
 			this.setState({loading:true})
@@ -85,6 +85,12 @@ import ProgressBar from './ProgressBar'
 			.then(
 				()=>{
 				this.setState({loading:false,message:'',errors:[] })
+
+				this.state.
+					typingRef
+		 			.child(channel.id)
+		 			.child(user.uid)
+		 			.remove()
 			})
 			.catch(err=>{
 				console.errror(err)
@@ -163,16 +169,43 @@ import ProgressBar from './ProgressBar'
  		}
  	)}
 
+
+ 	handleKeyDown=()=>{
+ 		const {message,typingRef,channel,user}=this.state;
+
+ 		if(message){
+
+ 			typingRef
+ 			.child(channel.id)
+ 			.child(user.uid)
+ 			.set(user.displayName)
+
+ 		}else{
+
+
+ 			typingRef
+ 			.child(channel.id)
+ 			.child(user.uid)
+ 			.remove()
+
+
+
+ 		}
+ 	}	
+
 	render() {
 
-		const {errors,message,loading,modal,uploadState,percentUploaded}=this.state
+		const {getMessagesRef}=this.props
+
+		const {errors,message,loading,modal,uploadState,percentUploaded,typingRef}=this.state
 
 
 		return (
 			<Segment className="message__form">
 				 <Input 
 					 fluid 
-					 name="message" 
+					 name="message"
+					 onKeyDown={this.handleKeyDown} 
 					 value={message}
 					 onChange={this.handleChange} 
 					 className={ errors.some(error=>error.message.includes('message'))?'error':''}  

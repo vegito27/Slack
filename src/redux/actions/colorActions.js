@@ -9,4 +9,4 @@ export const setColors=(primaryColor,secondaryColor)=>{
 			secondaryColor
 		}
 	}
-}
+} 

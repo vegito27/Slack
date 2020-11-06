@@ -37,8 +37,8 @@ const App=({currentUser,currentChannel,isPrivateChannel,userPosts,primaryColor,s
     currentChannel:state.channel.currentChannel,
     isPrivateChannel:state.channel.isPrivateChannel,
     userPosts:state.channel.userPosts,
-    primaryColor:state.channel.primaryColor,
-    secondaryColor:state.channel.secondaryColor  
+    primaryColor:state.color.primaryColor,
+    secondaryColor:state.color.secondaryColor  
 
   })
 

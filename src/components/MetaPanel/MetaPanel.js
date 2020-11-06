@@ -59,10 +59,8 @@ import {Segment,Accordion,Header,Icon,Image,List} from 'semantic-ui-react'
 
 		const {userPosts}=this.props
 
-
 		if(privateChannel || !channel) return null;
  
-
 		return (
 
 			<Segment>
@@ -86,7 +84,6 @@ import {Segment,Accordion,Header,Icon,Image,List} from 'semantic-ui-react'
 						<Icon name="user circle" />
 						Top Posters
 
-
 					</Accordion.Title>
 
 					<Accordion.Content active={activeIndex===1} >
@@ -97,8 +94,6 @@ import {Segment,Accordion,Header,Icon,Image,List} from 'semantic-ui-react'
 						</List>
 
 					</Accordion.Content>
-
-
 
 					<Accordion.Title active={activeIndex===2} onClick={this.setActiveIndex} index={2}>
 
