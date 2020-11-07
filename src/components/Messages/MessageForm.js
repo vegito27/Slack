@@ -4,6 +4,8 @@ import firebase from '../../firebase'
 import FileModal from './FileModal'
 import { v4 as uuidv4 } from 'uuid';
 import ProgressBar from './ProgressBar'
+import {Picker,emojiIndex} from 'emoji-mart'
+import 'emoji-mart/css/emoji-mart.css'   
 
  class MessageForm extends React.Component {
 
@@ -19,6 +21,7 @@ import ProgressBar from './ProgressBar'
 		errors:[],
 		modal:false,
 		percentUploaded:0,
+		emojiPicker:false
  	}
 
 
@@ -29,6 +32,18 @@ import ProgressBar from './ProgressBar'
 	handleChange=event=> {
 		this.setState({[event.target.name]:event.target.value})
 	}
+
+	componentWillUnmount() {
+    if (this.state.uploadTask !== null) {
+      this.state.uploadTask.cancel();
+      this.setState({ uploadTask: null });
+    }
+  }
+
+
+	
+
+	
 
 	createMessage=(fileUrl=null)=>{
 
@@ -110,7 +125,7 @@ import ProgressBar from './ProgressBar'
 
 	getPath=()=>{
 		if(this.props.isPrivateChannel){
-			 return `chat/private-${this.state.channel.id }`
+			 return `chat/private/${this.state.channel.id }`
 		}else{
 			return `chat/public`
 		}
@@ -170,7 +185,13 @@ import ProgressBar from './ProgressBar'
  	)}
 
 
- 	handleKeyDown=()=>{
+ 	handleKeyDown=(event)=>{
+
+ 		if(event.keyCode ===13 ){
+
+ 			this.sendMessage();
+ 		}
+
  		const {message,typingRef,channel,user}=this.state;
 
  		if(message){
@@ -182,47 +203,90 @@ import ProgressBar from './ProgressBar'
 
  		}else{
 
-
  			typingRef
  			.child(channel.id)
  			.child(user.uid)
  			.remove()
-
-
-
  		}
- 	}	
+ 	}
+
+ 	handleEmojiPicker=()=>{
+ 		this.setState({emojiPicker:!this.state.emojiPicker})
+ 	}
+
+ 	handleAddEmoji=emoji=>{
+ 		const oldMessage=this.state.message;
+ 		const newMessage=this.colonToUnicode(`${oldMessage}${emoji.colons}`)
+
+ 		this.setState({message:newMessage,emojiPicker:false})
+
+ 		setTimeout(()=>this.messageInputRef.focus(),0)
+ 	}
+
+ 	colonToUnicode = message => {
+	    return message.replace(/:[A-Za-z0-9_+-]+:/g, x => {
+	      x = x.replace(/:/g, "");
+	      let emoji = emojiIndex.emojis[x];
+	      if (typeof emoji !== "undefined") {
+	        let unicode = emoji.native;
+	        if (typeof unicode !== "undefined") {
+	          return unicode;
+	        }
+	      }
+	      x = ":" + x + ":";
+	      return x;
+	    });
+	  };
+
+
 
 	render() {
 
 		const {getMessagesRef}=this.props
 
-		const {errors,message,loading,modal,uploadState,percentUploaded,typingRef}=this.state
+		const {errors,message,loading,modal,uploadState,percentUploaded,typingRef,emojiPicker}=this.state
 
 
 		return (
 			<Segment className="message__form">
+			{emojiPicker && (<Picker set="apple" onSelect={this.handleAddEmoji} className="emojiPicker" title="pick your emoji" emoji="point_up" />)}
+
 				 <Input 
 					 fluid 
 					 name="message"
 					 onKeyDown={this.handleKeyDown} 
 					 value={message}
+					 ref={node=>(this.messageInputRef=node)}
 					 onChange={this.handleChange} 
 					 className={ errors.some(error=>error.message.includes('message'))?'error':''}  
-					 style={{marginBottom:'0.7em'}} label={<Button icon={'add'} />} 
+					 style={{marginBottom:'0.7em'}} 
+					 label={<Button onClick={this.handleEmojiPicker} content={emojiPicker?'Close':null} icon={emojiPicker?'close':'add'} />} 
 					 labelPosition="left" 
 					 placeholder="Write your message...."
 				 />
 
-				 
-
 				 <Button.Group icon widths="2">
-					 <Button onClick={this.sendMessage} disabled={loading} color="orange" content="Add Reply" labelPosition="left" icon="edit" />
-					 <Button color="teal" disabled={uploadState==='uploading'} onClick={this.openModal} content="Upload Media" labelPosition="right" icon="cloud upload" />
+					 <Button 
+						 onClick={this.sendMessage} 
+						 disabled={loading} 
+						 color="orange" 
+						 content="Add Reply" 
+						 labelPosition="left" 
+						 icon="edit" />
+
+					 <Button 
+						 color="teal" 
+						 disabled={uploadState==='uploading'} 
+						 onClick={this.openModal} 
+						 content="Upload Media" 
+						 labelPosition="right" 
+						 icon="cloud upload" />
+
 				 </Button.Group> 
-				 	 <FileModal modal={modal} closeModal={this.closeModal} uploadFile={this.uploadFile}/>
-				
-					<ProgressBar uploadState={uploadState} percentUploaded={percentUploaded}/>
+			 	
+			 	 <FileModal modal={modal} closeModal={this.closeModal} uploadFile={this.uploadFile}/>
+			
+				<ProgressBar uploadState={uploadState} percentUploaded={percentUploaded}/>
 			
 			</Segment>
 		);

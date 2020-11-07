@@ -61,7 +61,6 @@ class UserPanel extends React.Component {
 
 		if(this.avatarEditor){
 
-
 			this.avatarEditor.getImageScaledToCanvas().toBlob(blob=>{
 
 				let imageURL=URL.createObjectURL(blob)
@@ -81,7 +80,7 @@ class UserPanel extends React.Component {
 		const {storageRef,userRef,blob,metadata}=this.state
 
 		storageRef
-		.child(`avatars/user-${userRef.uid}`)
+		.child(`avatars/user/${userRef.uid}`)
 		.put(blob,metadata)
 		.then(snap=>{
 
@@ -95,6 +94,7 @@ class UserPanel extends React.Component {
 	}
 
 	changeAvatar=()=>{
+		
 		this.state.userRef.updateProfile({
 			photoURL:this.state.uploadCroppedImage
 		})

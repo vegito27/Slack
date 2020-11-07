@@ -6,7 +6,9 @@ import firebase from '../../firebase'
 import Message from './Message'
 import {connect} from 'react-redux' 
 import {setUserPosts} from '../../redux/actions/userActions'
-import Typing from './Typing' 
+import Typing from './Typing'
+import Skeleton from './Skeleton'
+
 
  class Messages extends React.Component {
 	
@@ -27,31 +29,150 @@ import Typing from './Typing'
 		searchResults:[],
 		privateMessagesRef:firebase.database().ref('privateMessages'),
 		isChannelStarred:false,
-		usersRef:firebase.database().ref('users')  
+		usersRef:firebase.database().ref('users'),
+		typingRef:firebase.database().ref('typing'),
+		typingUsers:[],
+		connectedRef:firebase.database().ref('.info/connected'),
+		listeners:[]  
 		
 		}
 	}
 
 	componentDidMount(){
-		const {channel,user}=this.state;
+		const {channel,user,listeners}=this.state;
 
 		if(channel && user){
-			 this.addListeners(channel.id)
+			this.removeListeners(listeners)
+			this.addListeners(channel.id)
 
-			 this.addUserStarListener(channel.id,user.uid)
+			this.addUserStarListener(channel.id,user.uid)
 		}
 	}
 
 	addListeners=channelId=>{
 		this.addMessagelisteners(channelId)
+		this.addTypingListeners(channelId)
 	}
+
+	componentWillUnmount() {
+	    this.removeListeners(this.state.listeners);
+	    this.state.connectedRef.off();
+	}
+
+	 removeListeners = listeners => {
+	    listeners.forEach(listener => {
+	      listener.ref.child(listener.id).off(listener.event);
+	    });
+	  };
+
+	addToListeners = (id, ref, event) => {
+	    const index = this.state.listeners.findIndex(listener => {
+	      return (
+	        listener.id === id && listener.ref === ref && listener.event === event
+	      );
+	    });
+
+	    if (index === -1) {
+	      const newListener = { id, ref, event };
+	      this.setState({ listeners: this.state.listeners.concat(newListener) });
+	    }
+	  }; 
+
+
+	componentDidUpdate(prevProps,prevState){
+
+		if(this.messagesEnd){
+			this.scrollToBottom();
+		}
+	}
+
+	scrollToBottom=()=>{
+
+		this.messagesEnd.scrollIntoView({behaviour:'smooth'})
+	}
+
+	addMessagelisteners=channelId=>{
+
+		let loadedMessages=[]
+
+		const ref=this.getMessagesRef()
+
+		//inserting messages into firebase
+
+		ref.child(channelId).on('child_added',snap=>{
+
+			loadedMessages.push(snap.val() )
+
+			//updating(filling) the messages array
+
+			this.setState({
+				messages:loadedMessages,
+				messagesLoading:false 
+			})
+
+			this.countuniqueUsers(loadedMessages)
+			this.countUserposts(loadedMessages)
+		})
+
+		this.addToListeners(channelId,ref,'child_added')
+	}
+
+
+	addTypingListeners=channelId=>{
+
+		let typingUsers=[]
+
+		this.state.typingRef.child(channelId).on('child_added',snap=>{
+
+			if(snap.key!==this.state.user.uid){
+				typingUsers=typingUsers.concat({
+
+					id:snap.key,
+					name:snap.val()
+				})
+
+				this.setState({typingUsers})
+			}
+		})
+
+
+		this.addToListeners(channelId,this.state.typingRef,'child_added')
+
+		this.state.typingRef.child(channelId).on('child_removed',snap=>{
+
+			const index=typingUsers.findIndex(user=>user.id===snap.key)
+
+			if(index!==-1){
+				typingUsers=typingUsers.filter(user=>user.id!==snap.key)
+				this.setState({typingUsers})
+			}
+		})
+
+		this.addToListeners(channelId,this.state.typingRef,'child_removed')
+
+		this.state.connectedRef.on('value',snap=>{
+			if(snap.value){
+
+				this.state.typingRef
+				.child(channelId)
+				.child(this.state.user.uid)
+				.onDisconnect()
+				.remove(err=>{
+
+					if(err!==null){
+						console.error(err)
+					}
+				})
+			}
+		})
+	}
+
 
 	isProgressBarVisible=percent=>{
 		 if(percent>0){
 		 	this.setState({progressBar:true})
 		 }
 	}
-
 
 	addUserStarListener=(channelId,userId)=>{
 
@@ -119,36 +240,8 @@ import Typing from './Typing'
 
 	displayChannelName=channel=>{
 		
-		return channel?`${this.state.privateChannel ? '@': '#'}${channel.name}`:' '
-		
+		return channel?`${this.state.privateChannel ? '@': '#'}${channel.name}`:' '	
 	}
-
-	addMessagelisteners=channelId=>{
-
-		let loadedMessages=[]
-
-
-		const ref=this.getMessagesRef()
-
-
-		//inserting messages into firebase
-
-		ref.child(channelId).on('child_added',snap=>{
-
-			loadedMessages.push(snap.val() )
-
-			//updating(filling) the messages array
-
-			this.setState({
-				messages:loadedMessages,
-				messagesLoading:false 
-			})
-
-			this.countuniqueUsers(loadedMessages)
-			this.countUserposts(loadedMessages)
-		})
-	}
-
 
 	getMessagesRef=()=>{
 
@@ -158,6 +251,7 @@ import Typing from './Typing'
  	}
 
 	countuniqueUsers=messages=>{
+	
 		const uniqueUsers=messages.reduce((acc,message)=> {
 
 			if(!acc.includes(message.user.name)){
@@ -195,9 +289,7 @@ import Typing from './Typing'
 
 		const regex=new RegExp(this.state.searchTerm,'gi')
 
-
 		const searchResults=channelMessages.reduce((acc,message)=>{
-
 
 			if((message.content && message.content.match(regex)) || message.user.name.match(regex)){
 				acc.push(message) 
@@ -223,8 +315,6 @@ import Typing from './Typing'
 
 				 acc[message.user.name].count+=1;
 
-
-
 			}else{
 
 				acc[message.user.name]={avatar:message.user.avatar,count:1}
@@ -247,10 +337,27 @@ import Typing from './Typing'
 				
 	)
 
+	displayTypingUser=users=>(
+
+		users.length && users.map(user=>(
+
+			<div style={{dislay:'flex',alignItems:'center',marginBottom:'0.2em'}} key={user.id}>
+				<span className="user__typing">{user.name} is Typing</span><Typing />
+			</div>
+
+			))
+		)
+
+	displayMessageSkeleton=loading=>(
+
+		loading ? (<React.Fragment>{[...Array(10)].map((_,i)=>(<Skeleton key={i} />))}</React.Fragment>):null
+
+	)	
+
 	render(){
 
-		const { messagesRef,messages,channel,user,progressBar,numUniqueUser,searchTerm,searchResults,searchLoading,privateChannel,isPrivateChannel,isChannelStarred }=this.state
-
+		const { messagesRef,messages,channel,user,progressBar,numUniqueUser,searchTerm,typingUsers,
+			    searchResults,searchLoading,privateChannel,isPrivateChannel,isChannelStarred,messagesLoading }=this.state
 
 		return (
 
@@ -267,12 +374,13 @@ import Typing from './Typing'
 
 				<Segment>
 					<Comment.Group className="messages">
+					{this.displayMessageSkeleton(messagesLoading)}
 
 					{ searchTerm ?  this.displayMessages(searchResults):this.displayMessages(messages) }
-					<div style={{dislay:'flex',alignItems:'center'}}>
 
-						<span className="user__typing">Douglas is Typing</span><Typing />
-					</div>
+					{this.displayTypingUser(typingUsers)}
+
+					<div ref={node=>(this.messagesEnd=node )} />
 			
 					</Comment.Group>
 

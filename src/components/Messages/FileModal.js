@@ -73,7 +73,6 @@ import Test from './Test'
 
 				</Modal.Actions>
 
-				<Test />
  
 			</Modal>
 		);

@@ -24,7 +24,19 @@ import {setCurrentChannel,setPrivateChannel} from '../../redux/actions/channelAc
 		if(this.state.user){
 			this.addListeners(this.state.user.uid)
 		}
+	}
 
+	componentWillUnmount(){
+
+		this.removeListeners()
+	}
+
+	removeListeners=()=>{
+		this.state.usersRef.off();
+
+		this.state.presenceRef.off() 
+
+		this.state.connectedRef.off()
 	}
 
 	addListeners=currentUserUid=>{

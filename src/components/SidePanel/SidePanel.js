@@ -7,9 +7,6 @@ import Starred from './Starred'
 
  class SidePanel extends React.Component {
 	
-	constructor(props) {
-		super(props);
-	}
 
 	render() {
 
@@ -26,7 +23,8 @@ import Starred from './Starred'
 				<UserPanel primaryColor={primaryColor} currentUser={currentUser}/>
 				<Starred currentUser={currentUser}/>
 				<Channels currentUser={currentUser}/>
-				<DirectMessages currentUser={currentUser} />
+				<DirectMessages currentUser={currentUser} 
+			/>
 
 			</Menu>
 
