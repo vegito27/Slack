@@ -8,25 +8,36 @@ import "./App.css"
 
 const App=({currentUser,currentChannel,isPrivateChannel,userPosts,primaryColor,secondaryColor })=>{
 
+  console.log(userPosts)
+
   return (
     <Grid columns="equal" className="app2" style={{background:secondaryColor}}>
-
 
       <ColorPanel key={currentUser && currentUser.name} currentUser={currentUser}/>
       
       <SidePanel 
         key={currentUser  && currentUser.id } 
         currentUser={currentUser}
-        primaryColor={primaryColor}
-        /> 
+        primaryColor={primaryColor}/> 
       
       <Grid.Column style={{marginLeft:320}}>
-         <Messages  key={currentChannel  && currentChannel.id } currentChannel={currentChannel} currentUser={currentUser} isPrivateChannel={isPrivateChannel}/>
+         <Messages  
+           key={currentChannel  && currentChannel.id } 
+           currentChannel={currentChannel} 
+           currentUser={currentUser} 
+           isPrivateChannel={isPrivateChannel}/>
+
       </Grid.Column>
 
       <Grid.Column width="4">
-        <MetaPanel userPosts={userPosts} key={currentChannel && currentChannel.name} currentChannel={currentChannel} isPrivateChannel={isPrivateChannel}/>
+        <MetaPanel 
+          userPosts={userPosts} 
+          key={currentChannel && currentChannel.name} 
+          currentChannel={currentChannel} 
+          isPrivateChannel={isPrivateChannel}/>
+
       </Grid.Column>
+
     </Grid>
   );
 }
@@ -36,7 +47,7 @@ const App=({currentUser,currentChannel,isPrivateChannel,userPosts,primaryColor,s
     currentUser:state.user.currentUser,
     currentChannel:state.channel.currentChannel,
     isPrivateChannel:state.channel.isPrivateChannel,
-    userPosts:state.channel.userPosts,
+    userPosts:state.user.userPosts,
     primaryColor:state.color.primaryColor,
     secondaryColor:state.color.secondaryColor  
 

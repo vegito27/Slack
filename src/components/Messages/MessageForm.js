@@ -35,15 +35,11 @@ import 'emoji-mart/css/emoji-mart.css'
 
 	componentWillUnmount() {
     if (this.state.uploadTask !== null) {
-      this.state.uploadTask.cancel();
-      this.setState({ uploadTask: null });
-    }
-  }
-
-
-	
-
-	
+	      this.state.uploadTask.cancel();
+	      this.setState({ uploadTask: null });
+	 
+	    }
+	 }
 
 	createMessage=(fileUrl=null)=>{
 
@@ -132,7 +128,6 @@ import 'emoji-mart/css/emoji-mart.css'
 	}
 
 	uploadFile=(file,metadata)=>{
-
 
  		const pathToUpload=this.state.channel.id
  		const ref=this.props.getMessagesRef() 
@@ -238,8 +233,6 @@ import 'emoji-mart/css/emoji-mart.css'
 	    });
 	  };
 
-
-
 	render() {
 
 		const {getMessagesRef}=this.props
@@ -260,7 +253,7 @@ import 'emoji-mart/css/emoji-mart.css'
 					 onChange={this.handleChange} 
 					 className={ errors.some(error=>error.message.includes('message'))?'error':''}  
 					 style={{marginBottom:'0.7em'}} 
-					 label={<Button onClick={this.handleEmojiPicker} content={emojiPicker?'Close':null} icon={emojiPicker?'close':'add'} />} 
+					 label={<Button onClick={this.handleEmojiPicker} content={emojiPicker?'Close':null} icon={emojiPicker?'close':'meh outline'} />} 
 					 labelPosition="left" 
 					 placeholder="Write your message...."
 				 />

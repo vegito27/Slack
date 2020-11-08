@@ -57,7 +57,8 @@ import {Segment,Accordion,Header,Icon,Image,List} from 'semantic-ui-react'
 
 		const {activeIndex,privateChannel,channel }=this.state
 
-		const {userPosts}=this.props
+		const {userPosts,currentChannel}=this.props
+
 
 		if(privateChannel || !channel) return null;
  
@@ -76,7 +77,7 @@ import {Segment,Accordion,Header,Icon,Image,List} from 'semantic-ui-react'
 
 					</Accordion.Title>
 
-					<Accordion.Content active={activeIndex===0}>{channel.details} </Accordion.Content>
+						<Accordion.Content style={{marginLeft:"1em"}} active={activeIndex===0}>###  {channel.details} </Accordion.Content>
 
 					<Accordion.Title active={activeIndex===1} onClick={this.setActiveIndex} index={1}>
 

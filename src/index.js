@@ -17,7 +17,7 @@ import {createStore} from 'redux'
 import {Provider,connect} from 'react-redux'
 import {composeWithDevTools} from 'redux-devtools-extension'
 import rootReducer from './redux/combineReducers'
-import {setUser,clearUser} from './redux/actions/userActions'
+import {setUser,clearUser,setUserPosts} from './redux/actions/userActions'
 
 const store=createStore(rootReducer,composeWithDevTools())
 
@@ -46,15 +46,17 @@ class Root extends React.Component{
 
 	render(){
 
-		return (this.props.isLoading?<Spinner />:( 
-			<Switch>
-				<Route exact path="/" component={App} />
-				<Route exact path="/login" component={Login} />
-				<Route exact path="/register" component={Register} />
-			</Switch>)
-			)
+		return (this.props.isLoading?
+			<Spinner />:( 
+					<Switch>
+						<Route exact path="/" component={App} />
+						<Route exact path="/login" component={Login} />
+						<Route exact path="/register" component={Register} />
+					</Switch>
+					)
+				)
+			}
 		}
-	}
 	
 const mapStateFromProps=state=>({
 
@@ -62,7 +64,7 @@ const mapStateFromProps=state=>({
 	
 })	
 
-const RootWithAuth=withRouter(connect(mapStateFromProps,{setUser,clearUser})(Root)) 
+const RootWithAuth=withRouter(connect(mapStateFromProps,{setUser,clearUser,setUserPosts})(Root)) 
 
 
 ReactDOM.render(

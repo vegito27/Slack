@@ -1,8 +1,8 @@
 import { SET_COLORS } from '../types'
 
 const initialColorsState={
-	primaryColor:'#4c3c4c',
-	secondaryColor:'#eee'
+	primaryColor:'#000',
+	secondaryColor:'#e6ede7'
 }
 
 const color_reducer=(state=initialColorsState,action)=>{

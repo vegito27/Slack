@@ -94,7 +94,7 @@ class UserPanel extends React.Component {
 	}
 
 	changeAvatar=()=>{
-		
+
 		this.state.userRef.updateProfile({
 			photoURL:this.state.uploadCroppedImage
 		})
@@ -115,9 +115,6 @@ class UserPanel extends React.Component {
 			.catch(err=>console.error(err))
 
 	}
-
-
-
 
 	handleChange=event=>{
 
@@ -145,8 +142,8 @@ class UserPanel extends React.Component {
 
 						<Header inverted floated="left" as="h2">
 
-							<Icon name="code"/>
-							<Header.Content>DevChat</Header.Content>
+							<Icon name="themeisle"/>
+							<Header.Content>Slack</Header.Content>
 
 						</Header>
 
@@ -164,13 +161,21 @@ class UserPanel extends React.Component {
 								 <Grid.Row>
 									 <Grid.Column className="ui center aligned grid">Image previewImage
 
-									 {previewImage && (<AvatarEditor ref={node=>(this.avatarEditor=node)} image={previewImage} width={120} height={120} border={50} scale={1.2} />)}
+									 {previewImage && 
+									 	(<AvatarEditor 
+									 		ref={node=>(this.avatarEditor=node)} 
+									 		image={previewImage} 
+									 		width={120} 
+									 		height={120} 
+									 		border={50} 
+									 		scale={1.2} 
+									 	/>)}
 
 									 </Grid.Column>
 
 									  <Grid.Column className="ui center aligned grid"> 
 
-									  {croppedImage && <Image style={{margin:'3.5em auto'}} width={100} height={100} src={croppedImage} />}
+										  {croppedImage && <Image style={{margin:'3.5em auto'}} width={100} height={100} src={croppedImage} />}
 									 </Grid.Column>
 
 								 </Grid.Row>

@@ -69,6 +69,7 @@ class Channels extends React.Component {
 
 
 	handleNotifications=(channelId,currentChannelId,notifications,snap)=>{
+
 		let lastTotal=0;
 
 		let index=notifications.findIndex(notification=>notification.id=== channelId)
@@ -153,7 +154,7 @@ class Channels extends React.Component {
 
 		this.props.setPrivateChannel(false) 
 
-		this.setState({channel} ) 
+		this.setState({channel}) 
 	}
 
 	setActiveChannel=channel=>{
@@ -161,6 +162,7 @@ class Channels extends React.Component {
 	}
 
 	clearNotifications=()=>{
+		
 		 let index=this.state.notifications.findIndex(notification=>notification.id===this.state.channel.id)
 
 		 if(index!==-1){

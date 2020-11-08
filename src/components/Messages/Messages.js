@@ -337,16 +337,19 @@ import Skeleton from './Skeleton'
 				
 	)
 
-	displayTypingUser=users=>(
+	displayTypingUser=users=>
 
-		users.length && users.map(user=>(
+		users.length >0 && users.map(user=>(
 
 			<div style={{dislay:'flex',alignItems:'center',marginBottom:'0.2em'}} key={user.id}>
 				<span className="user__typing">{user.name} is Typing</span><Typing />
 			</div>
 
-			))
-		)
+			));
+		
+
+	
+
 
 	displayMessageSkeleton=loading=>(
 
@@ -378,7 +381,7 @@ import Skeleton from './Skeleton'
 
 					{ searchTerm ?  this.displayMessages(searchResults):this.displayMessages(messages) }
 
-					{this.displayTypingUser(typingUsers)}
+					{typingUsers && this.displayTypingUser(typingUsers)}
 
 					<div ref={node=>(this.messagesEnd=node )} />
 			

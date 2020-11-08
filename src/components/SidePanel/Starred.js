@@ -75,9 +75,6 @@ class Starred extends React.Component {
 
 		this.setState({starredChannels:filteredChannels})	 
 
-
-
-
 		})
 	}
 
@@ -90,7 +87,7 @@ class Starred extends React.Component {
 
 		this.props.setPrivateChannel(false) 
 
-		}
+	}
 
 
 

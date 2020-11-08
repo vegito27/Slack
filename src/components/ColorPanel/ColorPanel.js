@@ -96,7 +96,6 @@ class ColorPanel extends React.Component {
 
 		)
 
-
 	saveColors=(primary,secondary)=>{
 		this.state.usersRef.child(`${this.state.user.uid}/colors`)
 		.push().update({primary,secondary})
